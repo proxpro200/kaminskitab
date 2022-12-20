@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kliknij w obrazek</title>
+    <style>
+        #container {
+            width:400px;
+            height:400px;
+            margin:0 auto;
+        }
+
+        #counter {
+            margin: 0 auto;
+            width: 200px;
+            font-size: 30px;
+        }
+
+        img {
+            width:400px;
+            height:400px;
+        }
+
+        #dropdown {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="counter">Punkty: <span id="count">0</span></div>
+        <img id="image" src="https://cdn.discordapp.com/attachments/723140500609171496/1052611983863713862/kaminski.png" onClick="increment()" />
+    </div>
+
+    <div style="text-align: center;">
+        <div>
+            <h3><button onclick="dropdown()">Zakup skina</button>&nbsp;<button onclick="skinList()">&#9662;</button></h3>
+            <div id="dropdown">
+                <p>Cool Kamiński - 5000 punktów</p>
+                <button onclick="buySkin1()">Kup</button>
+                <div><img src="https://cdn.discordapp.com/attachments/723140500609171496/1054118223974506586/kaminski2.png" width="50"/></div><br>
+                <p>Cool Naćpany Kamiński - 20000 punktów</p>
+                <button onclick="buySkin2()">Kup</button>
+                <div><img src="https://cdn.discordapp.com/attachments/723140500609171496/1054119396135665744/kaminski3.png" width="50"/></div>
+            </div>
+            <div id="skinList">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Zmienna do przechowywania aktualnego stanu licznika
+        let count = localStorage.getItem("count")
+        let skin = localStorage.getItem("skin")
+        let skins = JSON.parse(localStorage.getItem("skins"))
+
+
+        if (count == null) {
+            count = 0
+        } else {
+            count = parseInt(count)
+        }
+
+        if (skin == null) {
+            skin = 0
+        } else {
+            skin = parseInt(skin)
+        }
+
+        if (skins == null) {
+            skins = []
+        }
+
+        document.getElementById("count").innerHTML = count
+        document.getElementById('image').src = "https://cdn.discordapp.com/attachments/723140500609171496/1052611983863713862/kaminski.png"
+
+        if (skin === 1) {
+            document.getElementById('image').src = "https://cdn.discordapp.com/attachments/723140500609171496/1054118223974506586/kaminski2.png"
+        } else if (skin === 2) {
+            document.getElementById('image').src = "https://cdn.discordapp.com/attachments/723140500609171496/1054119396135665744/kaminski3.png"
+        }
+
+        // Funkcja zwiększająca licznik
+        function increment() {
+            count += 1
+            document.getElementById("count").innerHTML = count
+            localStorage.setItem("count", count)
+            let img = document.getElementById('image')
+            img.style.width = '380px'
+            img.style.height = '380px'
+            setTimeout(function() {
+                img.style.width = '400px'
+                img.style.height = '400px'
+            }, 80);
+        }
+
+        // Funkcja do wyświetlania menu zakupu
+        function dropdown() {
+            let x = document.getElementById("dropdown")
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+
+        // Funkcja do wyświetlania listy skina
+        function skinList() {
+            let x = document.getElementById("skinList")
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+
+            let html = ''
+            for (let i = 0; i < skins.length; i++) {
+                html += skins[i]
+            }
+            document.getElementById('skinList').innerHTML = html
+        }
+
+        // Funkcja do zakupu pierwszego skina
+        function buySkin1() {
+            if(count >= 5000){
+                count -= 5000
+                document.getElementById("count").innerHTML = count
+                document.getElementById("image").src = "https://cdn.discordapp.com/attachments/723140500609171496/1054118223974506586/kaminski2.png"
+                localStorage.setItem("count", count)
+                localStorage.setItem("skin", 1)
+                skins.push("<p>Cool Kamiński - 5000 punktów&nbsp;<button onclick='changeSkin1()'>Zmień skina</button></p>")
+                localStorage.setItem("skins", JSON.stringify(skins))
+            } else {
+                alert("Nie masz odpowiedniej ilości punktów!");
+            }
+        }
+
+        // Funkcja do zakupu drugiego skina
+        function buySkin2() {
+            if(count >= 20000){
+                count -= 20000
+                document.getElementById("count").innerHTML = count
+                document.getElementById("image").src = "https://cdn.discordapp.com/attachments/723140500609171496/1054119396135665744/kaminski3.png"
+                localStorage.setItem("count", count)
+                localStorage.setItem("skin", 2)
+                skins.push("<p>Cool Naćpany Kamiński - 20000 punktów&nbsp;<button onclick='changeSkin2()'>Zmień skina</button></p>")
+                localStorage.setItem("skins", JSON.stringify(skins))
+            } else {
+                alert("Nie masz odpowiedniej ilości punktów!");
+            }
+        }
+
+        // Funkcja do zmiany pierwszego skina
+        function changeSkin1() {
+            document.getElementById("image").src = "https://cdn.discordapp.com/attachments/723140500609171496/1054118223974506586/kaminski2.png"
+            localStorage.setItem("skin", 1)
+        }
+
+        // Funkcja do zmiany drugiego skina
+        function changeSkin2() {
+            document.getElementById("image").src = "https://cdn.discordapp.com/attachments/723140500609171496/1054119396135665744/kaminski3.png"
+            localStorage.setItem("skin", 2)
+        }
+    </script>
+</body>
+</html>
